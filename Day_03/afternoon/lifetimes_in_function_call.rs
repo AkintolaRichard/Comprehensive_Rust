@@ -20,4 +20,19 @@ fn cab_distance(p1: &Point, p2: &Point) -> i32 {
 fn nearest<'a>(points: &'a [Point], query: &Point) -> Option<&'a Point> {
     let mut nearest = None;
     for p in points {
-        if let 
+        if let Some((_, nearest_dist)) = nearest {
+            let dist = cab_distance(p, query);
+            if dist < nearest_dist {
+                nearest = Some((p, dist));
+            }
+        } else {
+            nearest = Some((p, cab_distance(p, query)));
+        };
+    }
+    nearest.map(|(p, _)| p)
+}
+
+fn main() {
+    let points = &[Point(1, 0), Point(1, 0), Point(-1, 0), Point(0, -1)];
+    println!("{:?}", nearest(points, &Point(0, 2)));
+}
